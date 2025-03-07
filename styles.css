@@ -1,0 +1,980 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+}
+
+#menu {
+  background: url('Background.png');
+  background-size: 200% 200%;
+  position: relative;
+  overflow: hidden;
+  animation: scrollBackground 20s linear infinite;
+}
+
+@keyframes scrollBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -100% -100%;
+  }
+}
+
+#play-menu h2 {
+  font-size: 36px;
+}
+
+button {
+  font-size: 24px;
+  margin: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #222;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
+  overflow-x: auto;
+}
+
+.toolbar-category {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  min-width: fit-content;
+}
+
+.category-header {
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.category-slots {
+  display: flex;
+  gap: 5px;
+}
+
+.toolbar-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.toolbar-actions button {
+  font-size: 14px;
+  padding: 8px 12px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.slot {
+  width: 40px;
+  height: 40px;
+  background: #444;
+  border: 2px solid #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.slot span {
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.slot.selected {
+  border: 2px solid #fff;
+  background: #666;
+}
+
+.slot img {
+  max-width: 80%;
+  max-height: 80%;
+  pointer-events: none;
+}
+
+.edit-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 30px;
+  background: #444;
+  border: 2px solid #666;
+  cursor: pointer;
+}
+
+.edit-mode img {
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.edit-mode.selected {
+  background: #666;
+  border: 2px solid #fff;
+}
+
+.selection-box {
+  position: absolute;
+  border: 2px dashed yellow;
+  background-color: rgba(255, 255, 0, 0.1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.item-properties {
+  position: absolute;
+  background: #333;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 20;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+}
+
+.item-properties label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.item-properties select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+#grid-container {
+  margin-top: 80px;
+  width: 100%;
+  height: calc(100% - 80px);
+  overflow: hidden;
+  cursor: default;
+}
+
+#editor-canvas, #game-canvas {
+  background: #1a1a1a;
+}
+
+.play-input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#levelInput {
+  font-size: 24px;
+  padding: 10px;
+  width: 400px;
+  border-radius: 5px;
+  border: none;
+}
+
+#game-container {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: #6185f8;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#backToMenuBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+#backToMenuBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 90%;
+  width: 500px;
+  box-sizing: border-box;
+}
+
+.modal-content h2 {
+  font-family: 'Press Start 2P', cursive;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#levelIdText {
+  width: 100%;
+  height: 60px;
+  margin: 10px 0;
+  padding: 5px;
+  resize: none;
+}
+
+#testBtn {
+  margin-right: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#testBtn:hover {
+  background-color: #45a049;
+}
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+}
+
+.menu-scene {
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  display: none; 
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.menu-button {
+  background: #e52521;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px #8b1914;
+  text-transform: uppercase;
+  min-width: 200px;
+  text-align: center;
+}
+
+.menu-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px #8b1914;
+}
+
+.menu-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #8b1914;
+}
+
+.menu-button.green {
+  background: #5ac54f;
+  box-shadow: 0 4px #2e8124;
+}
+
+.menu-button.green:hover {
+  box-shadow: 0 6px #2e8124;
+}
+
+.menu-button.green:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #2e8124;
+}
+
+.menu-button.blue {
+  background: #4d6cfa;
+  box-shadow: 0 4px #2a3b8f;
+}
+
+.menu-button.blue:hover {
+  box-shadow: 0 6px #2a3b8f;
+}
+
+.menu-button.blue:active {
+  box-shadow: 0 2px #2a3b8f;
+}
+
+#courses-menu {
+  background: linear-gradient(135deg, #4a148c 0%, #311b92 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.courses-header {
+  width: 100%;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.sort-btn {
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sort-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sort-btn.selected {
+  background: #4CAF50;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.search-bar {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 800px;
+  width: 90%;
+}
+
+.search-bar {
+  margin: 10px auto;
+}
+
+#courseSearch {
+  flex: 1;
+  padding: 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+#courseSearch {
+  padding: 15px;
+}
+
+#courseSearch:focus {
+  outline: none;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+#searchBtn {
+  padding: 20px 40px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  border: none;
+  background: #4d6cfa;
+  color: white;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(77, 108, 250, 0.3);
+}
+
+#searchBtn {
+  padding: 15px 30px;
+}
+
+#searchBtn:hover {
+  background: #3955d6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(77, 108, 250, 0.4);
+}
+
+.courses-list {
+  padding: 30px;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-bottom: 100px;
+}
+
+.courses-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.courses-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.courses-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+}
+
+.courses-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.course-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 15px;
+  color: #333;
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+  margin-bottom: 15px;
+}
+
+.course-preview {
+  width: 120px;
+  height: 90px;
+  background: #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.course-info h3 {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  color: #1a1a1a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.course-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.course-user img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.course-user span {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  color: #666;
+}
+
+.course-stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.course-stats span {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: #4CAF50;
+}
+
+.play-course {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  white-space: nowrap;
+}
+
+.play-course:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.course-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #4CAF50, #2196F3);
+}
+
+.course-card .course-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delete-course {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+  white-space: nowrap;
+  margin-right: 10px;
+  display: none;
+}
+
+.delete-course:hover {
+  background: #ff0000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 68, 68, 0.4);
+}
+
+#pause-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.pause-content {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  border: 4px solid white;
+}
+
+.pause-content h2 {
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  font-size: 36px;
+  margin-bottom: 40px;
+  text-shadow: 3px 3px #000;
+}
+
+.pause-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pause-buttons .menu-button {
+  background: #e52521;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px #8b1914;
+  text-transform: uppercase;
+  min-width: 200px;
+  text-align: center;
+}
+
+.pause-buttons .menu-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px #8b1914;
+}
+
+.pause-buttons .menu-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #8b1914;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 15px 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+#levelName, #levelDescription {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+
+#levelName:focus, #levelDescription:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+  transform: translateY(-2px);
+}
+
+#levelDescription {
+  height: 120px;
+  resize: none;
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.upload-buttons button {
+  padding: 15px 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  border: none;
+  border-radius: 25px;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#confirmUploadBtn {
+  background: #4CAF50;
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+#confirmUploadBtn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+#cancelUploadBtn {
+  background: #f44336;
+  color: white;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+#cancelUploadBtn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+#levelIdDisplay {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+.like-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.like-btn {
+  font-size: 24px;
+  padding: 10px 20px;
+  border: 2px solid white;
+  background: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+.like-btn:hover {
+  transform: scale(1.1);
+}
+
+.like-btn.selected {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+#playBtn {
+  display: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#menu h1, #play-menu h2 {
+  color: white;
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px #000, -2px -2px #000, 2px -2px #000, -2px 2px #000;
+}
+
+#backFromCoursesBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.completion-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  pointer-events: auto;
+}
+
+.completion-content {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  border: 4px solid #FFD700;
+  animation: slideIn 0.5s ease-out;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.completion-content h2 {
+  font-family: 'Press Start 2P', cursive;
+  color: #FFD700;
+  font-size: 36px;
+  margin-bottom: 40px;
+  text-shadow: 3px 3px #000;
+}
+
+.completion-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.completion-buttons .menu-button {
+  background: #FFD700;
+  color: #000;
+  box-shadow: 0 4px #B8860B;
+}
+
+.completion-buttons .menu-button:hover {
+  background: #FFA500;
+  box-shadow: 0 6px #B8860B;
+}
+
+.completion-buttons .menu-button:active {
+  box-shadow: 0 2px #B8860B;
+}
+
+.game-over-content h2 {
+  font-family: 'Press Start 2P', cursive;
+  color: #ff0000;
+  font-size: 36px;
+  margin-bottom: 40px;
+  text-shadow: 3px 3px #000;
+}
+
+.game-over-content .menu-button {
+  background: #ff0000;
+  color: white;
+  box-shadow: 0 4px #8B0000;
+}
+
+.game-over-content .menu-button:hover {
+  background: #FF4500;
+  box-shadow: 0 6px #8B0000;
+}
+
+.game-over-content .menu-button:active {
+  box-shadow: 0 2px #8B0000;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.changelog-content {
+  max-width: 600px;
+  text-align: left;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.changelog-entry {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.changelog-entry h3 {
+  color: #4d6cfa;
+  margin-bottom: 15px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+}
+
+.changelog-entry ul {
+  padding-left: 20px;
+}
+
+.changelog-entry li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+#closeChangelogBtn {
+  background: #4d6cfa;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+#closeChangelogBtn:hover {
+  background: #3955d6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(77, 108, 250, 0.4);
+}

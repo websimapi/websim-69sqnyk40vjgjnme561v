@@ -1,0 +1,42 @@
+saveLevel() {
+  const blocks = [];
+  this.blocks.forEach((type, key) => {
+    if (type !== 'spawn') {
+      const [x, y] = key.split(',').map(Number);
+      const typeChar = type === 'floor' ? 'f' :
+                      type === 'brick' ? 'b' :
+                      type === 'hardblock' ? 'h' :
+                      type === 'mystery' ? 'm' :
+                      type === 'coin' ? 'c' :
+                      type === 'goomba' ? 'g' :
+                      type === 'koopa' ? 'k' :
+                      type === 'spiney' ? 's' :
+                      type === 'cloudblock' ? 'l' :
+                      type[0];
+      const contents = type === 'mystery' ? (this.mysteryContents.has(key) ? 'mushroom' : 'coin') : null;
+      blocks.push([x, y, typeChar, contents]);
+    }
+  });
+
+  const pipeConnections = [];
+  this.pipeConnections.forEach((exitPos, entryPos) => {
+    const [entryX, entryY] = entryPos.split(',').map(Number);
+    const [exitX, exitY] = exitPos.split(',').map(Number);
+    pipeConnections.push([entryX, entryY, exitX, exitY]);
+  });
+
+  // Include goal post if exists
+  const goalPostData = this.goalPost ? [this.goalPost.x, this.goalPost.y, 2, 2] : null;
+
+  return {
+    b: blocks,
+    s: [this.spawnPoint.x, this.spawnPoint.y],
+    d: Array.from(this.scenery.keys()).map(key => {
+      const [x, y] = key.split(',').map(Number);
+      const info = this.scenery.get(key);
+      return [x, y, info.type];
+    }),
+    p: pipeConnections,
+    g: goalPostData,  
+  };
+}
